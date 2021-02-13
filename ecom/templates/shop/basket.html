@@ -1,0 +1,134 @@
+{% extends 'base.html' %} {% load static %}{% block title %}
+{% endblock %}{% block content %}
+    <div id="all">
+      <div id="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- breadcrumb-->
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                  <li aria-current="page" class="breadcrumb-item active">Shopping cart</li>
+                </ol>
+              </nav>
+            </div>
+            <div id="basket" class="col-lg-9">
+              <div class="box">
+                <form >
+                  <h1>Shopping cart</h1>
+                  <p class="text-muted">
+                    You currently have {{items_in_cart}} item(s) in your cart.</p>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th colspan="2">Product</th>
+                          <th>Quantity</th>
+                          <th>Unit price</th>
+                          <th>Discount</th>
+                          <th colspan="2">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in items %}
+                        <tr>
+                          <td><a href="{% url 'detail' item.item.pk %}"><img 
+                            src="{{item.item.thumbnail.url}}" alt="White Blouse Armani"></a></td>
+                          <td><a 
+                            href="{% url 'detail' item.item.pk %}">{{item.item.name}}</a></td>
+                          <td>
+                            <form action="" method="POST">
+                              {% csrf_token %}
+                              <input id="{{item.item.id}}" 
+                              name="Quantity" type="number"
+                             value="{{item.quantity}}" class="form-control"> 
+                            </form>  
+                          </td>
+                          <td>Ghc{{item.item.price}}</td>
+                          <td><strike>Ghc0.00</strike></td>
+                          <td>Ghc{{item.getTotalPrice}}</td>
+                          <td><a id="{{item.item.id}}"
+                            href="{% url 'remove_cart_item' item.item.pk %}"><i class="fa fa-trash-o"></i></a></td>
+                        </tr>
+                        {% empty %}
+                        <p>Your cart is empty</p>
+                        {% endfor %}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th colspan="5">Total</th>
+                          <th colspan="2">Ghc {{totalCost}}</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.table-responsive-->
+                  <div class="box-footer d-flex justify-content-between flex-column flex-lg-row">
+                    <div class="left"><a href="{% url 'products' %}" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i> Continue shopping</a></div>
+                    <form action="" method="POST">
+                      {% csrf_token %}
+                      <button name="" class="btn btn-outline-secondary"><i class="fa fa-refresh"></i> Update cart</button>
+                      </form>
+                    <div class="right">
+                    {% if items %}
+                      <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to checkout <i class="fa fa-chevron-right"></i></a>
+                      {% endif %}
+                    </div>
+                    <!--  -->
+                  </div>
+                </form>
+              </div>
+              <!-- /.box-->
+            
+            </div>
+            <!-- /.col-lg-9-->
+            <div class="col-lg-3">
+              <div id="order-summary" class="box">
+                <div class="box-header">
+                  <h3 class="mb-0">Order summary</h3>
+                </div>
+                <p class="text-muted">Shipping and additional costs are calculated based on the values you have entered.</p>
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>Order subtotal</td>
+                        <th>Ghc {{totalCost}}</th>
+                      </tr>
+                      <tr>
+                        <td>Shipping and handling</td>
+                        <th><strike>Ghc0.00</strike></th>
+                      </tr>
+                      <tr>
+                        <td>Tax</td>
+                        <th><strike>Ghc1.00</strike></th>
+                      </tr>
+                      <tr class="total">
+                        <td>Total</td>
+                        <th>Ghc {{totalCost}}</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="box">
+                <div class="box-header">
+                  <h4 class="mb-0">Coupon code</h4>
+                </div>
+                <p class="text-muted">If you have a coupon code, please enter it in the box below.</p>
+                <form>
+                  <div class="input-group">
+                    <input type="text" class="form-control"><span class="input-group-append">
+                      <button type="button" class="btn btn-primary"><i class="fa fa-gift"></i></button></span>
+                  </div>
+                  <!-- /input-group-->
+                </form>
+              </div>
+            </div>
+            <!-- /.col-md-3-->
+          </div>
+        </div>
+      </div>
+    </div>
+     {% endblock %}

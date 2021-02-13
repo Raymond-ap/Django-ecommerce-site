@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% load static %}{% block title %}
+{% endblock %}{% block content %}
+ <div id="all">
+      <div id="content">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- breadcrumb-->
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li aria-current="page" class="breadcrumb-item active">My account</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-lg-3">
+              <!--
+              *** CUSTOMER MENU ***
+              _________________________________________________________
+              -->
+              <div class="card sidebar-menu">
+                <div class="card-header">
+                  <h3 class="h4 card-title">Customer section</h3>
+                </div>
+                <div class="card-body">
+                  <a href="{% url 'account' %}" class="nav-link active"><i class="fa fa-user"></i> My account</a>
+                 <a href="{% url 'wishlist' %}" class="nav-link"><i class="fa fa-heart"></i> My wishlist</a>
+                 <a href="{% url 'logout' %}" class="nav-link"><i class="fa fa-sign-out"></i> Logout</a></ul>
+                </div>
+              </div>
+              <!-- /.col-lg-3-->
+              <!-- *** CUSTOMER MENU END ***-->
+            </div>
+            <div class="col-lg-9">
+              <div class="box">
+                <h1>My account</h1>
+                <p class="lead">Change your personal details or your password here.</p>
+                <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                <h3>Change password</h3>
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="password_old">Old password</label>
+                        <input id="password_old" type="password" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="password_1">New password</label>
+                        <input id="password_1" name="password_1" type="password" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="password_2">Retype new password</label>
+                        <input id="password_2" name="password_2" type="password" class="form-control" required>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.row-->
+                  <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save new password</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
