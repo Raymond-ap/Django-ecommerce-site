@@ -50,15 +50,21 @@ def logout_user(request):
 
 
 def homepage(request):
+    search = search_product(request)
+
     products = Product.objects.filter(published=True).order_by('-created')[:8]
 
     context = {
         "products": products,
+        'search': search
     }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/index.html', context)
 
 
 def products(request):
+    search = search_product(request)
 
     category = request.GET.get('category')
     if category == None:
@@ -76,24 +82,35 @@ def products(request):
     context = {
         'products': products,
         'page_objects': page_objects,
-        'categories': categories
+        'categories': categories,
+        'search': search
     }
+
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/category.html', context)
 
 
 def detail(request, pk):
+    search = search_product(request)
+
     products = Product.objects.filter(published=True).order_by('-created')[:3]
     product = Product.objects.get(id=pk)
 
     context = {
         'product': product,
-        'products': products
+        'products': products,
+        'search': search
     }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/detail.html', context)
 
 
 @login_required(login_url='registration')
 def cart(request):
+    search = search_product(request)
+
     if request.user.is_authenticated:
         items = OrderItem.objects.filter(
             user=request.user).order_by('-created')
@@ -107,8 +124,11 @@ def cart(request):
         return redirect('products')
     context = {
         "items": items,
-        'totalCost': totalCost
+        'totalCost': totalCost,
+        'search': search
     }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/basket.html', context)
 
 
@@ -161,21 +181,32 @@ def addWishList(request, pk):
 
 @login_required(login_url='registration')
 def viewWishList(request):
+    search = search_product(request)
+
     items = Wishlist.objects.filter(user=request.user).order_by('-created')
     context = {
-        'items': items
+        'items': items,
+        'search': search
     }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/customer-wishlist.html', context)
 
 
 @login_required(login_url='registration')
 def checkout(request):
+    search = search_product(request)
 
-    context = {}
+    context = {
+        'search': search
+    }
     return render(request, 'shop/checkout1.html', context)
 
 
 def customer_account(request):
+    search = search_product(request)
+    if search:
+        return render(request, 'shop/searc_result.html', {'search': search})
     if request.method == 'POST':
         data = request.POST
         user = User.objects.get(username=request.user)
@@ -186,10 +217,34 @@ def customer_account(request):
 
 
 def contact(request):
+    search = search_product(request)
 
-    context = {}
+    context = {
+        'search': search
+    }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/contact.html', context)
 
 
 def questions(request):
+    search = search_product(request)
+    context = {
+        'search': search
+    }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
     return render(request, 'shop/faq.html')
+
+
+# def search_resut(request):
+#     return render(request, 'searc_result.html')
+
+
+def search_product(request):
+    if request.method == 'POST' and 'Search Product' in request.POST:
+        data = request.POST
+        quary = Product.objects.filter(
+            published=True, name__contains=data['search'])
+        print('Quary ==========', quary)
+        return quary

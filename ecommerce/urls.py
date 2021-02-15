@@ -16,4 +16,5 @@ urlpatterns = [
     path('wishlist', viewWishList, name='wishlist'),
     path('logout', logout_user, name='logout'),
     path('remove_cart_item/<int:pk>', removeCartItem, name='remove_cart_item'),
+    # path('result', search_resut, name='result')
 ]
