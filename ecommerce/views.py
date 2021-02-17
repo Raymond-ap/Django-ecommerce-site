@@ -111,20 +111,7 @@ def detail(request, pk):
 def cart(request):
     search = search_product(request)
 
-    if request.user.is_authenticated:
-        items = OrderItem.objects.filter(
-            user=request.user).order_by('-created')
-        totalCost = 0
-        # Calculating total cost
-        for item in items:
-            totalCost += item.getTotalPrice
-    else:
-        items = []
-        messages.info(request, 'Please login')
-        return redirect('products')
     context = {
-        "items": items,
-        'totalCost': totalCost,
         'search': search
     }
     if search:
@@ -201,6 +188,29 @@ def checkout(request):
         'search': search
     }
     return render(request, 'shop/checkout1.html', context)
+
+
+def delivery(request):
+    search = search_product(request)
+
+    context = {
+        'search': search
+    }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
+    return render(request, 'shop/checkout3.html', context)
+
+
+def payment(request):
+    search = search_product(request)
+
+    context = {
+        'search': search
+    }
+    if search:
+        return render(request, 'shop/searc_result.html', context)
+    return render(request, 'shop/checkout2.html', context)
+
 
 
 def customer_account(request):
